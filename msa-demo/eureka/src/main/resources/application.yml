@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: server
+
+server:
+  port: 8761
+
+eureka:
+  client:
+    fetch-registry: false # 다른 Eureka서버로부터 레지스트리를 가져오지 않음
+    register-with-eureka: false #자기 자신을 Eureka에 등록하지 않음
+  server:
+    enable-self-preservation: false # (선택) 자기 보호모드 비활성화 - 개발환경에서만 권장
+  instance:
+    hostname: localhost #Eureka 서버 자신의 이름(호스트명) -> localhost가 기본값이기 때문에 'localhost'일 경우 생략해도 됨, 실제환경에서 서버 도메인이나 IP로 바꾸기
+

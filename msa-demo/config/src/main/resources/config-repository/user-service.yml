@@ -1,0 +1,28 @@
+server:
+  port: 0 #랜덤포트 (Eureka 등록 시 편함) - 같은 서비스를 포트 충돌 없이 여러개 띄우기 위해
+
+spring:
+  datasource: #db 설정
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hubEleven?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa: #JPA 설정
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true #SQL문 보기 예쁘게 출력
+        dialect: org.hibernate.dialect.MySQLDialect #MySQL 문법으로 출력
+    show-sql: true #콘솔에 SQL문 출력
+
+
+eureka: #Eureka Client 설정
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka #Eureka 서버 주소
+
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}  # 인스턴스마다 고유 ID
