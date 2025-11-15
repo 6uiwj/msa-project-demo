@@ -5,12 +5,12 @@ spring:
   profiles:
     active: native #깃허브 confing 레포를 쓰지않고 로헐환경의 config 파일을 쓰겠다.
   application:
-    name: config-server
+    name: config
   cloud:
     config:
       server:
         native:
-          search-locations: classpath:/config-repo
+          search-locations: classpath:/config-repository #yml파일들을 관리하는 위치의 상대경로(절대경로도 가능)
 
 eureka:
   client:
