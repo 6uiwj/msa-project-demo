@@ -5,7 +5,7 @@ spring:
   profiles:
     active: native #깃허브 confing 레포를 쓰지않고 로헐환경의 config 파일을 쓰겠다.
   application:
-    name: config
+    name: config-server
   cloud:
     config:
       server:
