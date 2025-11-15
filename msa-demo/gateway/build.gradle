@@ -31,16 +31,13 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator' //게이트웨이 상태 모니터링
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway-server-webflux' //게이트웨이
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer' //로드밸런서
-    implementation 'org.springframework.boot:spring-boot-starter-security' //시큐리티
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client' //유레카 클라이언트
-
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
 }
 
