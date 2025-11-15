@@ -21,3 +21,11 @@ spring:
               uri: lb://USER-SERVICE #LoadBalancer 사용 (Eureka 기반으로 자동 부하분산)
               predicates:
                 - Path=/v1/users/** #어떤 요청을 user-service로 보낼지?
+            - id: product-service
+              uri: lb://PRODUCT-SERVICE
+              predicates:
+                - Path=/v1/products/**
+            - id: order-service
+              uri: lb://ORDER-SERVICE
+              predicates:
+                - Path=/v1/order/**
