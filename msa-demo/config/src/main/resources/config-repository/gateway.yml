@@ -9,13 +9,15 @@ spring:
 
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true #Eureka에 등록된 모든 서비스 이름을자동으로 Gateway 라우팅에 연결
-          lower-case-service-id: true #eureka 서비스명을 모두 소문자로 처리
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true #Eureka에 등록된 모든 서비스 이름을자동으로 Gateway 라우팅에 연결
+              lower-case-service-id: true #eureka 서비스명을 모두 소문자로 처리
 
-      routes:
-        - id: user-service #라우트의 이름
-          uri: lb://USER-SERVICE #LoadBalancer 사용 (Eureka 기반으로 자동 부하분산)
-          predicates:
-            - Path=/v1/users/** #어떤 요청을 user-service로 보낼지?
+          routes:
+            - id: user-service #라우트의 이름
+              uri: lb://USER-SERVICE #LoadBalancer 사용 (Eureka 기반으로 자동 부하분산)
+              predicates:
+                - Path=/v1/users/** #어떤 요청을 user-service로 보낼지?

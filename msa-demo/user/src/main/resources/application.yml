@@ -1,7 +1,6 @@
 spring:
   application:
-    name: gateway
-
+    name: user-service
   config:
     import: "configserver:http://localhost:8888"
   profiles:

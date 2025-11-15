@@ -3,5 +3,6 @@ rootProject.name = 'msa-demo'
 include (
         "config",
         "gateway",
-        "user"
+        "user",
+        "eureka"
 )
