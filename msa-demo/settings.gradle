@@ -4,5 +4,6 @@ include (
         "config",
         "gateway",
         "user",
-        "eureka"
+        "eureka",
+        "order"
 )
