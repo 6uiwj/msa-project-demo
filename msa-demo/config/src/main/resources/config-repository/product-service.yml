@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hubdemo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/mydb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
@@ -17,7 +17,15 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect #MySQL 문법으로 출력
     show-sql: true #콘솔에 SQL문 출력
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+
 eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}  # 인스턴스마다 고유 ID
+
