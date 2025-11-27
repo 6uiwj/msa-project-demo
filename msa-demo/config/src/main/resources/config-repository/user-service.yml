@@ -5,8 +5,8 @@ spring:
   datasource: #db 설정
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mydb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: user
+    password: pass
   jpa: #JPA 설정
     hibernate:
       ddl-auto: create
