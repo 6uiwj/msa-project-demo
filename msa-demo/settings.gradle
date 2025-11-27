@@ -6,5 +6,6 @@ include (
         "user",
         "eureka",
         "order",
-        "product"
+        "product",
+        "orchestration"
 )
