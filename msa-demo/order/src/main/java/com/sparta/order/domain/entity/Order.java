@@ -27,8 +27,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID orderId;
 
-    private UUID userId;
-
     private Integer totalPrice;
 
     @Enumerated(EnumType.STRING)
@@ -37,15 +35,14 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    private Order(UUID userId, Integer totalPrice) {
-        this.userId = userId;
+    private Order(Integer totalPrice) {
         this.totalPrice = totalPrice;
         this.orderStatus = OrderStatus.CREATED;
     }
 
 
-    public static Order create(UUID userId, Integer totalPrice) {
-        return new Order(userId, totalPrice);
+    public static Order create(Integer totalPrice) {
+        return new Order(totalPrice);
     }
 
     // 연관관계 편의 메서드

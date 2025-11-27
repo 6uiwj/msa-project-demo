@@ -1,5 +1,6 @@
 package com.sparta.order.infrastructure.repository;
 
+import com.sparta.order.domain.entity.Order;
 import com.sparta.order.domain.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,5 +9,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OrderRepositoryAdaptor implements OrderRepository {
 
-    private OrderJpaRepository orderJpaRepository;
+    private final OrderJpaRepository orderJpaRepository;
+
+    @Override
+    public Order save(Order order) {
+        return orderJpaRepository.save(order);
+    }
 }

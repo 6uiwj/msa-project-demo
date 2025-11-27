@@ -4,6 +4,7 @@ import com.sparta.product.application.dto.request.ProductDto;
 import com.sparta.product.application.dto.response.ProductResponseDto;
 import com.sparta.product.domain.entity.Product;
 import com.sparta.product.domain.repository.ProductRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,10 @@ public class ProductService {
     //private final ProductJpaRepository productJpaRepository;
     private final ProductRepository productRepository;
 
-    public ProductResponseDto getProduct(Long number) {
-        LOGGER.info("[getProduct] input number {}", number);
+    public ProductResponseDto getProduct(UUID productId) {
+        LOGGER.info("[getProduct] id {}", productId);
         //Product product = productJpaRepository.findById(number).get();
-        Product product = productRepository.selectProduct(number);
+        Product product = productRepository.selectProduct(productId);
         LOGGER.info("[getProduct] product number : {}, name : {}", product.getName(), product.getName());
 
         return ProductResponseDto.from(product);
@@ -39,18 +40,27 @@ public class ProductService {
         return responseDto;
     }
 
-    public ProductResponseDto changeProductName(Long number, String name) throws Exception {
+    public ProductResponseDto changeProductName(UUID productId, String name) throws Exception {
         // Product foundProduct = productJpaRepository.findById(number).get();
         //foundProduct.updateProduct(name);
         //Product changedProduct = productJpaRepository.save(foundProduct);
-        Product changedProduct = productRepository.updateProduct(number, name);
+        Product changedProduct = productRepository.updateProduct(productId, name);
         ProductResponseDto responseDto = ProductResponseDto.from(changedProduct);
 
         return responseDto;
     }
 
-    public void deleteProduct(Long number) throws Exception {
+    public ProductResponseDto reserveStock(UUID productId, int quantity) {
+        Product product = productRepository.selectProduct(productId);
+        product.resetStock(quantity);
+        product = productRepository.saveAndFlushProduct(product);
+        ProductResponseDto responseDto = ProductResponseDto.from(product);
+
+    return responseDto;
+    }
+
+    public void deleteProduct(UUID productId) throws Exception {
         //productJpaRepository.deleteById(number);
-        productRepository.deleteProduct(number);
+        productRepository.deleteProduct(productId);
     }
 }

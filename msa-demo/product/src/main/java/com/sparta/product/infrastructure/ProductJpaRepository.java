@@ -1,8 +1,9 @@
 package com.sparta.product.infrastructure;
 
 import com.sparta.product.domain.entity.Product;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductJpaRepository extends JpaRepository<Product, Long> {
+public interface ProductJpaRepository extends JpaRepository<Product, UUID> {
 
 }

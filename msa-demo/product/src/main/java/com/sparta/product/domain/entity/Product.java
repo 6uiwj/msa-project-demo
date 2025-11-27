@@ -9,6 +9,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -26,8 +27,8 @@ import lombok.ToString;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long number;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID productId;
 
     @Column(nullable = false)
     private String name;
@@ -64,6 +65,13 @@ public class Product {
     public void updateProduct(String name) {
         this.name = name;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void resetStock(int quantity) {
+        this.stock = stock - quantity;
+        if (this.stock < 0) {
+            throw new RuntimeException("Stock exceeded");
+        }
     }
 
     @PrePersist

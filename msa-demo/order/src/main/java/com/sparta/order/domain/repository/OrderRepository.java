@@ -1,5 +1,7 @@
 package com.sparta.order.domain.repository;
 
-public interface OrderRepository {
+import com.sparta.order.domain.entity.Order;
 
+public interface OrderRepository {
+    Order save(Order order);
 }
