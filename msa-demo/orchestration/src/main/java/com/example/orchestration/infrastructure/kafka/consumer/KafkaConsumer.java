@@ -3,6 +3,8 @@ package com.example.orchestration.infrastructure.kafka.consumer;
 import com.example.orchestration.application.OrderSagaService;
 import com.example.orchestration.infrastructure.dto.OrderCreateFailedResponse;
 import com.example.orchestration.infrastructure.dto.OrderCreateSuccessResponse;
+import com.example.orchestration.infrastructure.dto.OrderDeleteSuccessResponseDto;
+import com.example.orchestration.infrastructure.dto.StockReserveFailedResponseDto;
 import com.example.orchestration.infrastructure.dto.StockReserveSuccessResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -64,5 +66,25 @@ public class KafkaConsumer {
     }
 
     //TODO: 재고 차감 실패 이벤트 구독 로직
+    @KafkaListener(topics = "stock-reduce-fail")
+    public void stockReduceFail(String stockMessage) {
+        log.info("stockReduceFail:{}", stockMessage);
 
+        try {
+            StockReserveFailedResponseDto responseDto = objectMapper.readValue(stockMessage, StockReserveFailedResponseDto.class);
+            orderSagaService.handleStockReduceFailed(responseDto);
+        } catch (Exception e) {
+            log.error("재고 차감 실패 메시지 파싱 실패");
+        }
+    }
+
+    @KafkaListener(topics = "order-delete-success")
+    public void orderCancelSuccess(String orderDeleteMessage) {
+        log.info("orderCancelSuccess:{}", orderDeleteMessage);
+        try {
+            OrderDeleteSuccessResponseDto responseDto = objectMapper.readValue(orderDeleteMessage, OrderDeleteSuccessResponseDto.class);
+        } catch (Exception e) {
+            log.error("주문 취서 성공 메시지 파싱 실패");
+        }
+    }
 }

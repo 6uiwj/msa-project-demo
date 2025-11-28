@@ -157,8 +157,8 @@ public class OrderSagaService {
             sagaState.startCompensation();
             sagaStateRepository.save(sagaState);
 
-            log.error("[Stock Reserve Failed] sagaId={}, reason={}, 보상 트랜잭션 시작",
-                sagaId, response.getReason());
+            log.error("[Stock Reserve Failed] sagaId={}, reason={}, orderId={} 보상 트랜잭션 시작",
+                sagaId, response.getReason(), response.getOrderId());
 
             // 보상: 주문 취소 명령 발행
             OrderCancelCommand cancelCommand = OrderCancelCommand.builder()
@@ -172,6 +172,8 @@ public class OrderSagaService {
         } catch (Exception e) {
             log.error("재고 차감 실패 처리 중 오류: sagaId={}", sagaId, e);
         }
+
+        log.info("재고차감 실패 후 보상 트랜잭션까지 모두 완료");
     }
 
         public SagaState getSagaState(UUID sagaId) {

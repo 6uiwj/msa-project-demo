@@ -6,8 +6,10 @@ import com.sparta.order.domain.entity.OrderItem;
 import com.sparta.order.domain.repository.OrderItemRepository;
 import com.sparta.order.domain.repository.OrderRepository;
 import com.sparta.order.infrastructure.dto.OrderCreateSuccessResponse;
+import com.sparta.order.infrastructure.dto.OrderDeleteMessage;
 import com.sparta.order.infrastructure.dto.OrderMessage;
 import com.sparta.order.infrastructure.dto.ProductDto;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -53,4 +55,9 @@ public class OrderService {
         return orderCreateSuccessResponse;
     }
 
+    public void deleteOrder(OrderDeleteMessage orderDeleteMessage) {
+
+        UUID orderId = orderDeleteMessage.getOrderId();
+        orderRepository.deleteById(orderId);
+    }
 }

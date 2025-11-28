@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.order.infrastructure.dto.OrderCreateFailedResponse;
 import com.sparta.order.infrastructure.dto.OrderCreateSuccessResponse;
+import com.sparta.order.infrastructure.dto.OrderDeleteSuccessResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -47,5 +48,20 @@ public class KafkaProducer {
         log.info("Sent Order Creation failed ");
 
         return orderCreateFailedResponse;
+    }
+
+    public void sendDeleteSuccess(String topic, OrderDeleteSuccessResponse orderDeleteSuccessResponse) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = "";
+        try {
+            jsonString = objectMapper.writeValueAsString(orderDeleteSuccessResponse);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        kafkaTemplate.send(topic, jsonString);
+        log.info("Sent Order Creation failed ");
+
     }
 }

@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,11 +53,14 @@ public class ProductService {
 
         return responseDto;
     }
-
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public StockReduceSuccessResponseDto reduceStock(StockMessage stockMessage) {
         Product product = productRepository.selectProduct(stockMessage.getProductId());
+
         product.reduceStock(stockMessage.getQuantity());
+
         product = productRepository.saveAndFlushProduct(product);
+
         StockReduceSuccessResponseDto responseDto =
             StockReduceSuccessResponseDto.builder()
                 .productId(product.getProductId())
