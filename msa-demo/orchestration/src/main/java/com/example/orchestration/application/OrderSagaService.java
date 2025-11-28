@@ -14,7 +14,7 @@ public class OrderSagaService {
         this.publisher = publisher;
     }
 
-    // 1️⃣ Saga 시작: 주문 생성 Command 발행
+    // 1. Saga 시작: 주문 생성 Command 발행
     public void startSaga(OrderRequestDto orderRequestDto) {
         System.out.println("Saga 시작");
         publisher.publishOrderCreateCommand("order-create-request", orderRequestDto);

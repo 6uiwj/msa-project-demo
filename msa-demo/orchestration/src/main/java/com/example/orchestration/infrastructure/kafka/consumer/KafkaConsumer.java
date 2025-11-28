@@ -38,6 +38,8 @@ public class KafkaConsumer {
 
     }
 
+    //TODO: 주문 생성 실패 이벤트 구독 로직 -> 주문 생성 실패시 클라이언트에 실패 메시지 반환?
+
     @KafkaListener(topics = "stock-reserve-success")
     public void stockReserveSuccess(String stockMessage) {
         log.info("stockReserveSuccess:{}", stockMessage);
@@ -47,6 +49,7 @@ public class KafkaConsumer {
         ObjectMapper mapper = new ObjectMapper();
         try {
             responseDto = mapper.readValue(stockMessage, StockReserveSuccessResponseDto.class);
+
         } catch (Exception e) {
             log.error("재고 차감 성공 메시지 파싱 실패");
         }

@@ -21,6 +21,7 @@ public class KafkaConsumer {
         this.orderService = orderService;
     }
 
+    //주문 생성 요청 메시지 구독
     @KafkaListener(topics = "order-create-request")
     public void createOrder(String kafkaMessage) {
 
@@ -28,6 +29,7 @@ public class KafkaConsumer {
         OrderMessage orderMessage = null;
         ObjectMapper mapper = new ObjectMapper();
 
+        //메시지 파싱
         try {
             orderMessage = mapper.readValue(kafkaMessage, OrderMessage.class);
             if(orderMessage == null) {
@@ -38,7 +40,11 @@ public class KafkaConsumer {
             e.printStackTrace();
         }
 
+        //주문 생성 로직 실행
         OrderCreateSuccessResponse response = orderService.createOrder(orderMessage);
+
+        //TODO: if문으로 성공시 실패시 발행할 메시지 분기?
+        //주문 생성 성공 메시지 발행
         kafkaProducer.send("order-success-create", response);
     }
 }

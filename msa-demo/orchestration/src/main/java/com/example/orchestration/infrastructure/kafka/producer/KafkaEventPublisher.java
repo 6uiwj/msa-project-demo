@@ -5,7 +5,6 @@ import com.example.orchestration.application.dto.request.OrderRequestDto;
 import com.example.orchestration.domain.DomainEvent;
 import com.example.orchestration.infrastructure.dto.OrderCreateSuccessResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -61,9 +60,10 @@ public class KafkaEventPublisher {
 
     }
 
-    public void publishPaymentCreateCommand(UUID orderId) {
-        System.out.println("Kafka 발행: CreatePaymentCommand, orderId=" + orderId);
-        kafkaTemplate.send("payment-create", orderId.toString());
+    //구현 전
+    public void publishPaymentCreateCommand() {
+        System.out.println("Kafka 발행: CreatePaymentCommand");
+        kafkaTemplate.send("payment-create", "");
     }
 
     public void publishSagaEvent(DomainEvent event) {
