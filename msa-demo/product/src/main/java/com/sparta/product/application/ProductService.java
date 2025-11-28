@@ -4,6 +4,8 @@ import com.sparta.product.application.dto.request.ProductDto;
 import com.sparta.product.application.dto.response.ProductResponseDto;
 import com.sparta.product.domain.entity.Product;
 import com.sparta.product.domain.repository.ProductRepository;
+import com.sparta.product.infrastructure.dto.StockMessage;
+import com.sparta.product.infrastructure.dto.StockReduceSuccessResponseDto;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -50,11 +52,19 @@ public class ProductService {
         return responseDto;
     }
 
-    public ProductResponseDto reserveStock(UUID productId, int quantity) {
-        Product product = productRepository.selectProduct(productId);
-        product.resetStock(quantity);
+    public StockReduceSuccessResponseDto reduceStock(StockMessage stockMessage) {
+        Product product = productRepository.selectProduct(stockMessage.getProductId());
+        product.reduceStock(stockMessage.getQuantity());
         product = productRepository.saveAndFlushProduct(product);
-        ProductResponseDto responseDto = ProductResponseDto.from(product);
+        StockReduceSuccessResponseDto responseDto =
+            StockReduceSuccessResponseDto.builder()
+                .productId(product.getProductId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .quantity(stockMessage.getQuantity())
+                .orderId(stockMessage.getOrderId())
+                .sagaId(stockMessage.getSagaId())
+                .build();
 
     return responseDto;
     }

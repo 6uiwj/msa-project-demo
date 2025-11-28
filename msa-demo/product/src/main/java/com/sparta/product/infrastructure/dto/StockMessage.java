@@ -10,4 +10,5 @@ public class StockMessage {
     UUID productId;
     int quantity;
     UUID orderId;
+    UUID sagaId;
 }

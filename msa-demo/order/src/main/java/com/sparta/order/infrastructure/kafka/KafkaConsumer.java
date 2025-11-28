@@ -3,6 +3,7 @@ package com.sparta.order.infrastructure.kafka;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.order.application.OrderService;
+import com.sparta.order.infrastructure.dto.OrderCreateFailedResponse;
 import com.sparta.order.infrastructure.dto.OrderCreateSuccessResponse;
 import com.sparta.order.infrastructure.dto.OrderMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -41,10 +42,22 @@ public class KafkaConsumer {
         }
 
         //주문 생성 로직 실행
-        OrderCreateSuccessResponse response = orderService.createOrder(orderMessage);
 
-        //TODO: if문으로 성공시 실패시 발행할 메시지 분기?
-        //주문 생성 성공 메시지 발행
-        kafkaProducer.send("order-success-create", response);
+        try {
+            log.info("주문 생성 로직 실행");
+            OrderCreateSuccessResponse response = orderService.createOrder(orderMessage);
+
+            //주문 생성 성공 메시지 발행
+            kafkaProducer.sendSuccess("order-success-create", response);
+
+        } catch (Exception e) {
+            OrderCreateFailedResponse orderCreateFailedResponse = new OrderCreateFailedResponse();
+            orderCreateFailedResponse.setSagaId(orderMessage.getSagaId());
+            orderCreateFailedResponse.setProductId(orderMessage.getProductId());
+            orderCreateFailedResponse.setQuantity(orderMessage.getQuantity());
+            orderCreateFailedResponse.setReason("몰랑..주문실패했엉..");
+            kafkaProducer.sendFail("order-create-fail", orderCreateFailedResponse);
+        }
+
     }
 }

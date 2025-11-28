@@ -2,6 +2,7 @@ package com.example.orchestration.infrastructure.kafka.producer;
 
 
 import com.example.orchestration.application.dto.request.OrderRequestDto;
+import com.example.orchestration.infrastructure.dto.OrderCancelCommand;
 import com.example.orchestration.infrastructure.dto.OrderCreateSuccessResponse;
 import com.example.orchestration.infrastructure.dto.StockReserveSuccessResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,4 +58,7 @@ public class KafkaEventPublisher {
         send(topic, responseDto);
     }
 
+    public void publishOrderCancelCommand(String topic, OrderCancelCommand cancelCommand) {
+        send(topic, cancelCommand);
+    }
 }

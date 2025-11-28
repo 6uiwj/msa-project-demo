@@ -10,5 +10,6 @@ public class OrderCreateSuccessResponse {
         UUID productId;
         int quantity;
         UUID orderId;
+        UUID sagaId;
 
 }

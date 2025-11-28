@@ -3,8 +3,8 @@ package com.sparta.product.infrastructure.kafka.consumer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.product.application.ProductService;
-import com.sparta.product.application.dto.response.ProductResponseDto;
 import com.sparta.product.infrastructure.dto.StockMessage;
+import com.sparta.product.infrastructure.dto.StockReduceSuccessResponseDto;
 import com.sparta.product.infrastructure.kafka.producer.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +37,9 @@ public class KafkaConsumer {
             e.printStackTrace();
         }
 
-        ProductResponseDto responseDto = productService.reserveStock(stockMessage.getProductId(), stockMessage.getQuantity());
+        StockReduceSuccessResponseDto responseDto = productService.reduceStock(stockMessage);
+
         kafkaProducer.send("stock-reserve-success", responseDto);
-        log.info("Sent stock reserve create message 전송");
+        log.info("Sent stock reserve create message 전송 : {}", responseDto.getSagaId());
         }
 }

@@ -67,7 +67,7 @@ public class Product {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void resetStock(int quantity) {
+    public void reduceStock(int quantity) {
         this.stock = stock - quantity;
         if (this.stock < 0) {
             throw new RuntimeException("Stock exceeded");

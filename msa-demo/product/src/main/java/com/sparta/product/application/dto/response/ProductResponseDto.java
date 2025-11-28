@@ -12,6 +12,7 @@ public class ProductResponseDto {
     private final int price;
     private final int stock;
 
+
     private ProductResponseDto(UUID productId, String name, int price, int stock) {
         this.productId = productId;
         this.name = name;

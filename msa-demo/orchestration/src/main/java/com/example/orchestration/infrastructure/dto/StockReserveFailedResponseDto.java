@@ -1,7 +1,8 @@
-package com.sparta.order.infrastructure.dto;
+package com.example.orchestration.infrastructure.dto;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,8 +11,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderMessage {
+@Builder
+public class StockReserveFailedResponseDto {
+    private UUID sagaId;
+    private UUID orderId;
     private UUID productId;
     private int quantity;
-    private UUID sagaId;
+    private String reason;
 }

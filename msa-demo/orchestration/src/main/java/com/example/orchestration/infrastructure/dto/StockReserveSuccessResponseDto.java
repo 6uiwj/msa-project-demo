@@ -5,8 +5,12 @@ import lombok.Getter;
 
 @Getter
 public class StockReserveSuccessResponseDto {
-    UUID productId;
-    String name;
-    int price;
-    int stock;
+    private UUID productId;
+    private String name;
+    private int price;
+    private UUID orderId;
+    private int quantity;
+    private UUID sagaId;
 }
+
+

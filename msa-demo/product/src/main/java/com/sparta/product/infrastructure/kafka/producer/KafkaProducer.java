@@ -2,7 +2,7 @@ package com.sparta.product.infrastructure.kafka.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.product.application.dto.response.ProductResponseDto;
+import com.sparta.product.infrastructure.dto.StockReduceSuccessResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,19 +15,19 @@ public class KafkaProducer {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public ProductResponseDto send(String topic, ProductResponseDto productResponseDto) {
+    public StockReduceSuccessResponseDto send(String topic, StockReduceSuccessResponseDto responseDto) {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = "";
 
         try{
-            jsonString = objectMapper.writeValueAsString(productResponseDto);
+            jsonString = objectMapper.writeValueAsString(responseDto);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
         kafkaTemplate.send(topic, jsonString);
-        log.info("Sent Order Created Successfully");
+        log.info("[Product] Sent Order Created Successfully : {}", responseDto.getSagaId());
 
-        return productResponseDto;
+        return responseDto;
     }
 }

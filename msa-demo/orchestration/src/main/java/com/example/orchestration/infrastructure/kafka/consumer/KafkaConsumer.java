@@ -1,6 +1,7 @@
 package com.example.orchestration.infrastructure.kafka.consumer;
 
 import com.example.orchestration.application.OrderSagaService;
+import com.example.orchestration.infrastructure.dto.OrderCreateFailedResponse;
 import com.example.orchestration.infrastructure.dto.OrderCreateSuccessResponse;
 import com.example.orchestration.infrastructure.dto.StockReserveSuccessResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ public class KafkaConsumer {
     private final OrderSagaService orderSagaService;
     private final ObjectMapper objectMapper;
 
+    //주문 생성 성공 메시지 구독
     @KafkaListener(topics = "order-success-create")
     public void orderCreateSuccess(String orderCreateSuccessResponse) {
         log.info("orderCreateSuccessResponse:{}", orderCreateSuccessResponse);
@@ -35,7 +37,19 @@ public class KafkaConsumer {
     }
 
     //TODO: 주문 생성 실패 이벤트 구독 로직 -> 주문 생성 실패시 클라이언트에 실패 메시지 반환?
+    @KafkaListener(topics = "order-create-fail")
+    public void orderCreateFail(String orderCreateFailResponse) {
+        log.info("orderCreateFailResponse:{}", orderCreateFailResponse);
+        try {
+            OrderCreateFailedResponse response = objectMapper.readValue(orderCreateFailResponse, OrderCreateFailedResponse.class);
+            orderSagaService.handleOrderCreateFailed(response);
+            log.info("주문 생성 실패 메시지 처리 완료");
+        } catch (Exception e) {
+            log.error("주문 실패 메시지 파싱 실패");
+        }
+    }
 
+    //재고 차감 성공 메시지 구독
     @KafkaListener(topics = "stock-reserve-success")
     public void stockReserveSuccess(String stockMessage) {
         log.info("stockReserveSuccess:{}", stockMessage);

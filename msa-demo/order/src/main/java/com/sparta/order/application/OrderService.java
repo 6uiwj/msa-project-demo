@@ -24,13 +24,14 @@ public class OrderService {
 
         ProductDto productDto = new ProductDto();
 
+        //feinnClient 통신 (order -> product)
         try {
-            log.info("productId : {}", orderMessage.getProductId());
+            log.info("[feign: order->product] productId : {}", orderMessage.getProductId());
             productDto = productClient.getProduct(orderMessage.getProductId()).getBody();
             log.info("Product 가져오기 성공: {}", productDto.getProductId());
 
         } catch (Exception e) {
-            log.info("[order -> product] feignClient 통신 실패");
+            log.info("[feign: order -> product] feignClient 통신 실패");
             throw new RuntimeException("feignClient getProduct 가져오기 실패");
         }
         int price = productDto.getPrice();
@@ -47,6 +48,7 @@ public class OrderService {
         orderCreateSuccessResponse.setOrderId(order.getOrderId());
         orderCreateSuccessResponse.setQuantity(orderItem.getQuantity());
         orderCreateSuccessResponse.setProductId(orderItem.getProductId());
+        orderCreateSuccessResponse.setSagaId(orderMessage.getSagaId());
 
         return orderCreateSuccessResponse;
     }
