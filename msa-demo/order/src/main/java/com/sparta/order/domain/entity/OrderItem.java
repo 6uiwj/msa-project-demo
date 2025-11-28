@@ -30,14 +30,15 @@ public class OrderItem  {
     @ManyToOne
     private Order order;
 
-    protected OrderItem( UUID productId, int quantity, int singlePrice) {
+    protected OrderItem( UUID productId, int quantity, int singlePrice, Order order) {
         this.productId = productId;
         this.quantity = quantity;
         this.singlePrice = singlePrice;
+        this.order = order;
     }
 
-    public static  OrderItem create(UUID productId, int quantity, int singlePrice) {
-        return new OrderItem(productId, quantity, singlePrice);
+    public static  OrderItem create(UUID productId, int quantity, int singlePrice, Order order) {
+        return new OrderItem(productId, quantity, singlePrice, order);
     }
 
     protected void setOrder(Order order) {

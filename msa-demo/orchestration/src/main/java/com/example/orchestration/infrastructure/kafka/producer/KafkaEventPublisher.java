@@ -2,7 +2,6 @@ package com.example.orchestration.infrastructure.kafka.producer;
 
 
 import com.example.orchestration.application.dto.request.OrderRequestDto;
-import com.example.orchestration.domain.DomainEvent;
 import com.example.orchestration.infrastructure.dto.OrderCreateSuccessResponse;
 import com.example.orchestration.infrastructure.dto.StockReserveSuccessResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,8 +57,4 @@ public class KafkaEventPublisher {
         send(topic, responseDto);
     }
 
-
-    public void publishSagaEvent(DomainEvent event) {
-        kafkaTemplate.send("saga-event", event.getOrderId().toString(), event.toString());
-    }
 }

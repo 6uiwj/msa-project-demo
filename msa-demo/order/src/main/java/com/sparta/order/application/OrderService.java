@@ -35,12 +35,13 @@ public class OrderService {
         }
         int price = productDto.getPrice();
 
-        OrderItem orderItem = OrderItem.create(orderMessage.getProductId(),orderMessage.getQuantity(),price);
-        orderItemRepository.save(orderItem);
 
         Order order = Order.create(orderMessage.getQuantity()*price);
-
         orderRepository.save(order);
+
+        OrderItem orderItem = OrderItem.create(orderMessage.getProductId(),orderMessage.getQuantity(),price,order);
+        orderItemRepository.save(orderItem);
+
 
         OrderCreateSuccessResponse orderCreateSuccessResponse = new OrderCreateSuccessResponse();
         orderCreateSuccessResponse.setOrderId(order.getOrderId());
