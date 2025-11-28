@@ -49,12 +49,14 @@ public class KafkaConsumer {
         ObjectMapper mapper = new ObjectMapper();
         try {
             responseDto = mapper.readValue(stockMessage, StockReserveSuccessResponseDto.class);
-
+            orderSagaService.handleStockReduceSuccess(responseDto);
         } catch (Exception e) {
             log.error("재고 차감 성공 메시지 파싱 실패");
         }
 
         System.out.println("재고 차감 후 메시지 받기 성공");
     }
+
+    //TODO: 재고 차감 실패 이벤트 구독 로직
 
 }

@@ -4,6 +4,7 @@ package com.example.orchestration.infrastructure.kafka.producer;
 import com.example.orchestration.application.dto.request.OrderRequestDto;
 import com.example.orchestration.domain.DomainEvent;
 import com.example.orchestration.infrastructure.dto.OrderCreateSuccessResponse;
+import com.example.orchestration.infrastructure.dto.StockReserveSuccessResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -61,7 +62,7 @@ public class KafkaEventPublisher {
     }
 
     //구현 전
-    public void publishPaymentCreateCommand() {
+    public void publishPaymentCreateCommand(String topic, StockReserveSuccessResponseDto responseDto) {
         System.out.println("Kafka 발행: CreatePaymentCommand");
         kafkaTemplate.send("payment-create", "");
     }
