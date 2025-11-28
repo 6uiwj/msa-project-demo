@@ -6,66 +6,58 @@ import com.example.orchestration.domain.DomainEvent;
 import com.example.orchestration.infrastructure.dto.OrderCreateSuccessResponse;
 import com.example.orchestration.infrastructure.dto.StockReserveSuccessResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class KafkaEventPublisher {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
-    public KafkaEventPublisher(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
+    //공통 발행 메서드
+    private String toJson(Object obj) {
+        try {
+            String json = objectMapper.writeValueAsString(obj);
+            if (json == null || json.isEmpty()) {
+                throw new RuntimeException("Kafka 메시지 직렬화 실패: 빈 데이터");
+            }
+            return json;
+        } catch (Exception e) {
+            log.error("Kafka 메시지 JSON 변환 실패: {}", obj, e);
+            throw new RuntimeException("Kafka 메시지 직렬화 오류", e);
+        }
     }
 
+    private void send(String topic, Object messageObj) {
+        String json = toJson(messageObj);
+        kafkaTemplate.send(topic, json);
+        log.info("[Kafka Publish] topic={}, message={}", topic, json);
+    }
+
+
+
    public OrderRequestDto publishOrderCreateCommand(String topic, OrderRequestDto orderRequestDto) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString = "";
-        try {
-            jsonString = objectMapper.writeValueAsString(orderRequestDto);
-            if(jsonString == null || jsonString.equals("")) {
-                log.info("오케스트레이터에서 주문생성 이벤트 발행 중 메시지를 담지 못함");
-                throw new RuntimeException("오케스트레이터에서 주문생성 이벤트 발행 중 메시지를 담지 못함");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        kafkaTemplate.send(topic, jsonString);
-       log.info("kafka Producer sent data from orchestration microservice");
+        send(topic, orderRequestDto);
         return orderRequestDto;
     }
 
-//    public void publishOrderCreateCommand(UUID orderId) {
-//        System.out.println("Kafka 발행: OrderCreateCommand, orderId=" + orderId);
-//        kafkaTemplate.send("order-create", orderId.toString());
-//    }
 
     public OrderCreateSuccessResponse publishStockReserveCommand(String topic, OrderCreateSuccessResponse response) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString = "";
-        try {
-            jsonString = objectMapper.writeValueAsString(response);
-            if (jsonString == null || jsonString.equals("")) {
-                log.info("오케스트레이터에서 재고차감 이벤트 발행 중 메시지를 담지 못함");
-                throw new RuntimeException("오케스트레이터에서 재고차감 이벤트 발행 중 메시지를 담지 못함");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        kafkaTemplate.send(topic, jsonString);
-        System.out.println("Kafka 발행: ReserveStockCommand");
+        send(topic, response);
         return response;
 
     }
 
     //구현 전
     public void publishPaymentCreateCommand(String topic, StockReserveSuccessResponseDto responseDto) {
-        System.out.println("Kafka 발행: CreatePaymentCommand");
-        kafkaTemplate.send("payment-create", "");
+        send(topic, responseDto);
     }
+
 
     public void publishSagaEvent(DomainEvent event) {
         kafkaTemplate.send("saga-event", event.getOrderId().toString(), event.toString());

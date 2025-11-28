@@ -28,6 +28,13 @@ spring:
       retries: 3
       acks: all
 
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
 eureka:
   instance:
     prefer-ip-address: true
