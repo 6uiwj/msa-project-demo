@@ -2,7 +2,6 @@ package com.example.orchestration.infrastructure.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -20,28 +19,6 @@ import org.springframework.kafka.core.ProducerFactory;
 @EnableKafka
 @Configuration
 public class KafkaConfig {
-    @Bean
-    public NewTopic orderCreateTopic() {
-        return new NewTopic("order-create", 1, (short)1);
-    }
-
-    @Bean
-    public NewTopic stockReserveTopic() {
-        return new NewTopic("stock-reserve", 1, (short)1);
-    }
-
-    @Bean
-    public NewTopic paymentCreateTopic() {
-        return new NewTopic("payment-create", 1, (short)1);
-    }
-
-    @Bean
-    public NewTopic sagaEventTopic() {
-        return new NewTopic("saga-event", 1, (short)1);
-    }
-
-
-
 
 
     @Bean

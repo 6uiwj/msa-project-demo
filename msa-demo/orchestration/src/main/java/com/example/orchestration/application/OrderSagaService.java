@@ -66,14 +66,14 @@ public class OrderSagaService {
         try {
             SagaState sagaState = getSagaState(sagaId);
 
-            // 멱등성 체크
+            // 멱등성 체크 - 이미 처리됐다면 넘어가기
             if (sagaState.getCurrentStep().ordinal() > SagaStep.ORDER_CREATE.ordinal()) {
                 log.warn("[Idempotency] 이미 처리된 이벤트: sagaId={}, currentStep={}",
                     sagaId, sagaState.getCurrentStep());
                 return;
             }
 
-            // 상태 업데이트 (orderId 저장)
+            // SAGA 레코드 상태 업데이트 (orderId 저장)
             SagaState updatedState = SagaState.builder()
                 .sagaId(sagaState.getSagaId())
                 .orderId(response.getOrderId())

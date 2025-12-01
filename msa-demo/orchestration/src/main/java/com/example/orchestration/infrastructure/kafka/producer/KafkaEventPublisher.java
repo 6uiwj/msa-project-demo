@@ -40,17 +40,14 @@ public class KafkaEventPublisher {
     }
 
 
-
-   public OrderRequestDto publishOrderCreateCommand(String topic, OrderRequestDto orderRequestDto) {
+    //주문 생성 요청 이벤트
+   public void publishOrderCreateCommand(String topic, OrderRequestDto orderRequestDto) {
         send(topic, orderRequestDto);
-        return orderRequestDto;
     }
 
-
-    public OrderCreateSuccessResponse publishStockReserveCommand(String topic, OrderCreateSuccessResponse response) {
+    //재고 차감 요청 이벤트
+    public void publishStockReserveCommand(String topic, OrderCreateSuccessResponse response) {
         send(topic, response);
-        return response;
-
     }
 
     //구현 전
